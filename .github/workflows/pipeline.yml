@@ -52,20 +52,8 @@ jobs:
         GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}  # Needed to get PR information, if any
         SONAR_TOKEN: ${{ secrets.SONAR_TOKEN }}
 
-      run: mvn -B verify org.sonarsource.scanner.maven:sonar-maven-plugin:sonar -Dsonar.projectKey=Devops-Fiap
-    
-  deploy-pre-build:
-    runs-on: ubuntu-latest
-    environment:
-      name: dev
-    needs: code-analisys
-    
-    if: github.ref == 'refs/heads/develop'
-    steps:
-      - name: DeployPreBuild
-        shell: bash
-        run: |
-          echo "Teste deploy pre build from dev"
+      run: mvn -B verify org.sonarsource.scanner.maven:sonar-maven-plugin:sonar -Dsonar.projectKey=Devops-Fiap   
+
       
   build:
     name: Build Archive
@@ -89,14 +77,27 @@ jobs:
         name: artifact
         #From this path
         path: ./target/demo-0.0.2.7-SNAPSHOT.jar 
-          
+
+  deploy-pre-build:
+    runs-on: ubuntu-latest
+    environment:
+      name: dev
+    needs: build
+    
+    if: github.ref == 'refs/heads/develop'
+    steps:
+      - name: DeployPreBuild
+        shell: bash
+        run: |
+          echo "Teste deploy pre build from dev"
+
   deploy-STG:
     runs-on: ubuntu-latest
     environment:
       name: stg
     needs: build
     
-    if: github.ref == 'refs/heads/develop'
+    if: github.ref == 'refs/heads/stag'
     steps:
       - name: Deploy 
         shell: bash
