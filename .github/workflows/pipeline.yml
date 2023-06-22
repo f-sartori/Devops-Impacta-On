@@ -110,7 +110,7 @@ jobs:
     if: github.ref == 'refs/heads/release'
     environment:
       name: pre
-    needs: build
+    needs: deploy-pre-build
 
     steps:
       - name: Deploy 
