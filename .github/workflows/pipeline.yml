@@ -58,7 +58,7 @@ jobs:
     runs-on: ubuntu-latest
     environment:
       name: dev
-    needs: build
+    needs: code-analisys
     
     if: github.ref == 'refs/heads/develop'
     steps:
