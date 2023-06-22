@@ -54,7 +54,19 @@ jobs:
 
       run: mvn -B verify org.sonarsource.scanner.maven:sonar-maven-plugin:sonar -Dsonar.projectKey=Devops-Fiap
     
+  deploy-pre-build:
+    runs-on: ubuntu-latest
+    environment:
+      name: dev
+    needs: build
     
+    if: github.ref == 'refs/heads/develop'
+    steps:
+      - name: DeployPreBuild
+        shell: bash
+        run: |
+          echo "Teste deploy pre build from dev"
+      
   build:
     name: Build Archive
     runs-on: ubuntu-latest
